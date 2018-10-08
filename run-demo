@@ -1,14 +1,15 @@
-#!/bin/sh
+:: Why? because windows can't do an OR within the conditional
+IF NOT DEFINED TOKBOX_API_KEY GOTO defkeysecret
+IF NOT DEFINED TOKBOX_SECRET GOTO defkeysecret
+GOTO skipdef
 
-if [ -z "$TOKBOX_API_KEY" ] || [ -z "$TOKBOX_SECRET" ]
-then
-  export TOKBOX_API_KEY=
-  export TOKBOX_SECRET=
-fi
+:defkeysecret
 
-if [ -d "storage" ]
-then
-  rm -rf storage/
-fi
+SET TOKBOX_API_KEY=0000
+SET TOKBOX_SECRET=0000000
 
-php -S localhost:8080 -t web/
+:skipdef
+
+RD /q /s storage
+
+php.exe -S localhost:8080 -t web web/index.php
